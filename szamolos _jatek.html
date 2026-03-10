@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<title>Számkitaláló játék</title>
+</head>
+
+<body>
+
+<script>
+
+let randomNumber = Math.floor(Math.random() * 1000001);
+
+let attempts = 0;
+
+const maxAttempts = 20;
+
+while (attempts < maxAttempts) {
+
+    let input = prompt("Adj meg egy számot 0 és 1 000 000 között:");
+
+    let guess = parseInt(input);
+
+    if (isNaN(guess)) {
+        alert("Ez nem egy szám! Próbáld újra.");
+        continue;
+    }
+
+    attempts++;
+
+    if (guess > randomNumber) {
+        alert(attempts + ". tipp nem talált: A megoldás kisebb.");
+    }
+    else if (guess < randomNumber) {
+        alert(attempts + ". tipp nem talált: A megoldás nagyobb.");
+    }
+    else {
+        alert("Gratulálok, " + attempts + " lépésből eltaláltad!");
+        break;
+    }
+
+    if (attempts === maxAttempts) {
+        alert("Sajnos ez most nem sikerült! A megoldás: " + randomNumber);
+    }
+
+}
+
+</script>
+
+</body>
+</html>
