@@ -1,4 +1,4 @@
-function searchRepo() {
+function searchUser() {
     const input = document.getElementById("searchInput").value;
     const resultsDiv = document.getElementById("results");
 
@@ -46,4 +46,44 @@ function loadNavbar() {
             document.getElementById("navbar-container").innerHTML = data;
         })
         .catch(error => console.error("Navbar hiba:", error));
+}
+function searchRepo() {
+    const input = document.getElementById("repoInput").value;
+    const resultsDiv = document.getElementById("repoResults");
+
+    if (input.trim() === "") {
+        alert("Adj meg egy repository nevet!");
+        return;
+    }
+
+    resultsDiv.innerHTML = "";
+
+    fetch(`https://api.github.com/search/repositories?q=${input}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Hiba történt!");
+            }
+            return response.json();
+        })
+        .then(data => {
+            data.items.forEach(repo => {
+
+                const card = document.createElement("div");
+                card.className = "col-3";
+
+                card.innerHTML = `
+                    <div class="card">
+                        <h3>${repo.name}</h3>
+                        <p>${repo.owner.login}</p>
+                        <a href="${repo.html_url}" target="_blank">Megnyitás</a>
+                    </div>
+                `;
+
+                resultsDiv.appendChild(card);
+            });
+        })
+        .catch(error => {
+            console.error(error);
+            alert("Hiba történt!");
+        });
 }
