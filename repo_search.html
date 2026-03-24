@@ -5,16 +5,12 @@
     <title>Repo keresés</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body onload="loadNavbar()">
 
-<div class="navbar">
-    <a href="index.html">Főoldal</a>
-    <a href="repo_search.html">Repo keresés</a>
-    <a href="bar.html">Bar oldal</a>
-</div>
+<div id="navbar-container"></div>
 
 <div class="container">
-    <h1>GitHub repository keresés</h1>
+    <h1>Repository keresés</h1>
 
     <input type="text" id="searchInput" placeholder="Repo neve...">
     <button class="btn btn-primary" onclick="searchRepo()">Keresés</button>
@@ -22,7 +18,7 @@
     <div id="results" class="row"></div>
 </div>
 
-<script src="script.js"></script>
+<script src="script2.js"></script>
 
 </body>
 </html>
