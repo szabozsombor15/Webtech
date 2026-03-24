@@ -1,4 +1,4 @@
-function searchUser() {
+function searchRepo() {
     const input = document.getElementById("searchInput").value;
     const resultsDiv = document.getElementById("results");
 
@@ -37,4 +37,13 @@ function searchUser() {
             console.error("Hiba:", error);
             alert("Hiba történt!");
         });
+}
+
+function loadNavbar() {
+    fetch("navbar.html")
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById("navbar-container").innerHTML = data;
+        })
+        .catch(error => console.error("Navbar hiba:", error));
 }
