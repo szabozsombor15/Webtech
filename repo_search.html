@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <title>Repo keresés</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="navbar">
+    <a href="index.html">Főoldal</a>
+    <a href="repo_search.html">Repo keresés</a>
+    <a href="bar.html">Bar oldal</a>
+</div>
+
+<div class="container">
+    <h1>GitHub repository keresés</h1>
+
+    <input type="text" id="searchInput" placeholder="Repo neve...">
+    <button class="btn btn-primary" onclick="searchRepo()">Keresés</button>
+
+    <div id="results" class="row"></div>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
