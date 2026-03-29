@@ -2,23 +2,64 @@
 <html lang="hu">
 <head>
     <meta charset="UTF-8">
-    <title>Repo keresés</title>
-    <link rel="stylesheet" href="style2.css">
+    <title>Repository keresés</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body onload="loadNavbar()">
+<body>
 
-<div id="navbar-container"></div>
+<h1>Repository keresés</h1>
 
-<div class="container">
-    <h1>GitHub repository keresés</h1>
+<input type="text" id="repo-search-input" placeholder="Repository elnevezése">
+<button class="btn btn-primary" id="search-btn">Keresés</button>
 
-    <input type="text" id="repoInput" placeholder="Repo neve...">
-    <button class="btn btn-primary" onclick="searchRepo()">Keresés</button>
+<div id="result"></div>
 
-    <div id="repoResults" class="row"></div>
-</div>
+<script src="app.js"></script>
 
-<script src="script2.js"></script>
+<script>
+    async function loadRepositories(searchText) {
+        try {
+            const res = await fetch('https://api.github.com/search/repositories?q='
+                + encodeURIComponent(searchText));
+
+            if (!res.ok) {
+                throw Error('Hibás válasz, státuszkód:' + res.status);
+            }
+
+            const data = await res.json();
+
+            const resultDiv = document.querySelector('#result');
+            resultDiv.innerHTML = '';
+
+            for (const repo of data.items) {
+                const repoHtml = `
+                    <div class="card">
+                        <p><strong>${repo.full_name}</strong></p>
+                        <p>${repo.description ?? "Nincs leírás"}</p>
+                        <p>Language: ${repo.language ?? "N/A"}</p>
+                    </div>
+                `;
+                resultDiv.innerHTML += repoHtml;
+            }
+        } catch (err) {
+            console.error(err);
+            alert('Hiba történt a keresés során.');
+        }
+    }
+
+    const searchBtn = document.querySelector('#search-btn');
+    searchBtn.addEventListener('click', () => {
+        const inputElem = document.querySelector('#repo-search-input');
+        const searchText = inputElem.value;
+
+        if (searchText.trim() === '') {
+            alert('Adj meg egy repository nevet!');
+            return;
+        }
+
+        loadRepositories(searchText);
+    });
+</script>
 
 </body>
 </html>
