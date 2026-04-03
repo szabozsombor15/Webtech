@@ -1,5 +1,3 @@
-const GH_ACCESS_TOKEN = 'PASTE-YOUR-TOKEN-HERE';
-
 function loadNavigation() {
     fetch('./navbar.html')
         .then(res => res.text())

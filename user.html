@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <title>User adatlap</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1 id="name"></h1>
+<img id="avatar" width="150">
+
+<p id="bio"></p>
+<p id="location"></p>
+<p><a id="blog"></a></p>
+
+<p id="repos"></p>
+<p id="followers"></p>
+
+<script src="app.js"></script>
+
+<script>
+async function loadUser(username) {
+    const res = await fetch(
+        'https://api.github.com/users/' + username
+    );
+
+    const data = await res.json();
+
+    document.getElementById("avatar").src = data.avatar_url;
+
+    if (data.name)
+        document.getElementById("name").textContent = data.name;
+
+    if (data.bio)
+        document.getElementById("bio").textContent = data.bio;
+
+    if (data.location)
+        document.getElementById("location").textContent = data.location;
+
+    if (data.blog) {
+        const blog = document.getElementById("blog");
+        blog.textContent = data.blog;
+        blog.href = data.blog;
+    }
+
+    if (data.public_repos != null)
+        document.getElementById("repos").textContent =
+            "Repo: " + data.public_repos;
+
+    if (data.followers != null)
+        document.getElementById("followers").textContent =
+            "Followers: " + data.followers;
+}
+
+const params = new URLSearchParams(window.location.search);
+const username = params.get("id");
+
+loadUser(username);
+</script>
+
+</body>
+</html>

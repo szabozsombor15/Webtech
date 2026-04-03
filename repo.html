@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <title>Repository adatlap</title>
+    <link rel="stylesheet" href="style2.css">
+</head>
+<body>
+
+<h1 id="repo-name"></h1>
+<p id="description"></p>
+
+<p>
+    <strong>Homepage:</strong>
+    <a id="homepage"></a>
+</p>
+
+<h2>Fájlok</h2>
+<ul id="files"></ul>
+
+<h2>Hibák</h2>
+<ul id="issues"></ul>
+
+<script src="script2.js"></script>
+
+<script>
+async function loadRepo(repoName) {
+    const res = await fetch('https://api.github.com/repos/' + repoName);
+    const data = await res.json();
+
+    document.getElementById("repo-name").textContent = data.full_name;
+    document.getElementById("description").textContent = data.description;
+
+    const homepage = document.getElementById("homepage");
+    homepage.textContent = data.homepage;
+    homepage.href = data.homepage;
+}
+
+async function loadFiles(repoName) {
+    const res = await fetch(`https://api.github.com/repos/${repoName}/contents`);
+    const data = await res.json();
+
+    const list = document.getElementById("files");
+
+    for (const file of data) {
+        list.innerHTML += `<li>${file.name}</li>`;
+    }
+}
+
+async function loadIssues(repoName) {
+    const res = await fetch(`https://api.github.com/repos/${repoName}/issues`);
+    const data = await res.json();
+
+    const list = document.getElementById("issues");
+
+    for (const issue of data) {
+        list.innerHTML += `<li>${issue.title}</li>`;
+    }
+}
+
+const params = new URLSearchParams(window.location.search);
+const repoName = params.get("name");
+
+loadRepo(repoName);
+loadFiles(repoName);
+loadIssues(repoName);
+</script>
+
+</body>
+</html>

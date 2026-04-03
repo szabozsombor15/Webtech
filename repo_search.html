@@ -9,56 +9,53 @@
 
 <h1>Repository keresés</h1>
 
-<input type="text" id="repo-search-input" placeholder="Repository elnevezése">
-<button class="btn btn-primary" id="search-btn">Keresés</button>
+<input type="text" id="repo-search-input">
+<button id="search-btn">Keresés</button>
 
 <div id="result"></div>
 
 <script src="script2.js"></script>
 
 <script>
-    async function loadRepositories(searchText) {
-        try {
-            const res = await fetch('https://api.github.com/search/repositories?q='
-                + encodeURIComponent(searchText));
+async function loadRepositories(searchText) {
+    try {
+        const res = await fetch(
+            'https://api.github.com/search/repositories?q=' +
+            encodeURIComponent(searchText)
+        );
 
-            if (!res.ok) {
-                throw Error('Hibás válasz, státuszkód:' + res.status);
-            }
+        const data = await res.json();
 
-            const data = await res.json();
+        const resultDiv = document.querySelector('#result');
+        resultDiv.innerHTML = '';
 
-            const resultDiv = document.querySelector('#result');
-            resultDiv.innerHTML = '';
-
-            for (const repo of data.items) {
-                const repoHtml = `
-                    <div class="card">
-                        <p><strong>${repo.full_name}</strong></p>
-                        <p>${repo.description ?? "Nincs leírás"}</p>
-                        <p>Language: ${repo.language ?? "N/A"}</p>
-                    </div>
-                `;
-                resultDiv.innerHTML += repoHtml;
-            }
-        } catch (err) {
-            console.error(err);
-            alert('Hiba történt a keresés során.');
+        for (const repo of data.items) {
+            resultDiv.innerHTML += `
+                <div class="card">
+                    <a href="repo.html?name=${encodeURIComponent(repo.full_name)}">
+                        ${repo.full_name}
+                    </a>
+                    <p>${repo.description ?? ""}</p>
+                </div>
+            `;
         }
+    } catch {
+        alert("Hiba történt!");
     }
+}
 
-    const searchBtn = document.querySelector('#search-btn');
-    searchBtn.addEventListener('click', () => {
-        const inputElem = document.querySelector('#repo-search-input');
-        const searchText = inputElem.value;
+document.querySelector('#search-btn')
+    .addEventListener('click', () => {
 
-        if (searchText.trim() === '') {
-            alert('Adj meg egy repository nevet!');
+        const input = document.querySelector('#repo-search-input').value;
+
+        if (!input.trim()) {
+            alert("Adj meg repository nevet!");
             return;
         }
 
-        loadRepositories(searchText);
-    });
+        loadRepositories(input);
+});
 </script>
 
 </body>
