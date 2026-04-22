@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <title>User keresés</title>
+    <link rel="stylesheet" href="style2.css">
+</head>
+<body>
+
+<h1>Felhasználó keresés</h1>
+
+<input type="text" id="user-search-input">
+<button id="search-btn">Keresés</button>
+
+<div id="result"></div>
+
+<script src="script2.js"></script>
+
+<script>
+async function loadUsers(searchText) {
+    try {
+        const res = await fetch(
+            'https://api.github.com/search/users?q=' +
+            encodeURIComponent(searchText)
+        );
+
+        const data = await res.json();
+
+        const resultDiv = document.querySelector('#result');
+        resultDiv.innerHTML = '';
+
+        for (const user of data.items) {
+            resultDiv.innerHTML += `
+                <div class="card">
+                    <img src="${user.avatar_url}" width="100">
+                    <a href="user.html?id=${user.login}">
+                        ${user.login}
+                    </a>
+                </div>
+            `;
+        }
+    } catch {
+        alert("Hiba történt!");
+    }
+}
+
+document.querySelector('#search-btn')
+    .addEventListener('click', () => {
+
+        const input = document.querySelector('#user-search-input').value;
+
+        if (!input.trim()) {
+            alert("Adj meg felhasználónevet!");
+            return;
+        }
+
+        loadUsers(input);
+});
+</script>
+
+</body>
+</html>

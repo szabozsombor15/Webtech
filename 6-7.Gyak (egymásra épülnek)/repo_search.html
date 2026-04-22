@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <title>Repository keresés</title>
+    <link rel="stylesheet" href="style2.css">
+</head>
+<body>
+
+<h1>Repository keresés</h1>
+
+<input type="text" id="repo-search-input">
+<button id="search-btn">Keresés</button>
+
+<div id="result"></div>
+
+<script src="script2.js"></script>
+
+<script>
+async function loadRepositories(searchText) {
+    try {
+        const res = await fetch(
+            'https://api.github.com/search/repositories?q=' +
+            encodeURIComponent(searchText)
+        );
+
+        const data = await res.json();
+
+        const resultDiv = document.querySelector('#result');
+        resultDiv.innerHTML = '';
+
+        for (const repo of data.items) {
+            resultDiv.innerHTML += `
+                <div class="card">
+                    <a href="repo.html?name=${encodeURIComponent(repo.full_name)}">
+                        ${repo.full_name}
+                    </a>
+                    <p>${repo.description ?? ""}</p>
+                </div>
+            `;
+        }
+    } catch {
+        alert("Hiba történt!");
+    }
+}
+
+document.querySelector('#search-btn')
+    .addEventListener('click', () => {
+
+        const input = document.querySelector('#repo-search-input').value;
+
+        if (!input.trim()) {
+            alert("Adj meg repository nevet!");
+            return;
+        }
+
+        loadRepositories(input);
+});
+</script>
+
+</body>
+</html>
